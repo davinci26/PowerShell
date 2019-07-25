@@ -5429,7 +5429,7 @@ namespace Microsoft.PowerShell.Commands
         /// <param name="found">True if a module was found.</param>
         /// <param name="moduleFileFound">True if a module file was found.</param>
         /// <returns>True if the module was successfully loaded.</returns>
-        internal PSModuleInfo LoadModule(PSModuleInfo parentModule, string fileName, string moduleBase, string prefix,
+        internal PSModuleInfo  LoadModule(PSModuleInfo parentModule, string fileName, string moduleBase, string prefix,
             SessionState ss, object privateData, ref ImportModuleOptions options,
             ManifestProcessingFlags manifestProcessingFlags, out bool found, out bool moduleFileFound)
         {
@@ -5441,7 +5441,7 @@ namespace Microsoft.PowerShell.Commands
                 moduleFileFound = false;
                 return null;
             }
-
+            
             var importingModule = 0 != (manifestProcessingFlags & ManifestProcessingFlags.LoadElements);
             var writingErrors = 0 != (manifestProcessingFlags & ManifestProcessingFlags.WriteErrors);
 
@@ -5454,6 +5454,13 @@ namespace Microsoft.PowerShell.Commands
             else
             {
                 ext = Path.GetExtension(fileName);
+            }
+
+            string moduleNameWithDataFileExtension = Path.ChangeExtension(fileName,StringLiterals.PowerShellDataFileExtension);
+            if (string.Equals(ext, StringLiterals.PowerShellModuleFileExtension, StringComparison.OrdinalIgnoreCase) 
+                && File.Exists(moduleNameWithDataFileExtension))
+            {
+                WriteWarning( $"You are importing a psm1 module when a when the module manifest {moduleNameWithDataFileExtension} exists in the same directory");
             }
 
             PSModuleInfo module = null;
