@@ -5524,7 +5524,7 @@ namespace Microsoft.PowerShell.Commands
                     string moduleNameWithDataFileExtension = Path.ChangeExtension(fileName,StringLiterals.PowerShellDataFileExtension);
                     if (File.Exists(moduleNameWithDataFileExtension))
                     {
-                        WriteWarning( $"You are attempting to import a psm1 module when a when the module manifest {moduleNameWithDataFileExtension} is also available");
+                        WriteWarning( $"You are attempting to import a psm1 module when the module manifest {moduleNameWithDataFileExtension} is also available");
                     }
 
                     if (!importingModule)
